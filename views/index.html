@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en" ng-app="discountAscii">
+<head>
+    <meta charset="utf-8">
+    <title>An Angular App</title>
+    <link rel="stylesheet" href="/stylesheets/index.css" />
+    <script src="/javascripts/jquery-2.2.0.min.js"></script>
+    <script src="/javascripts/moment/moment.js"></script>
+    <script src="/javascripts/angular/angular.js"></script>
+    <script src="/javascripts/ng-infinite-scroll.js"></script>
+    <script src="/javascripts/app/discountAscii.module.js"></script>
+    <script src="/javascripts/app/base.controller.js"></script>
+</head>
+<body>
+
+<div class="view-container" ng-controller="baseController as base">
+    <div>
+        <h1>Discount ASCII Warehouse</h1>
+        <div>Sponsored Ad: </div>
+        <div>
+            <img class='ad' ng-src="{{base.imgsrc}}" alt='advertisement' />
+        </div>
+    </div>
+    <p>
+        Sort by:
+        <select ng-model="orderProp">
+            <option value="none">none</option>
+            <option value="size">size</option>
+            <option value="price">price</option>
+            <option value="id">id</option>
+        </select>
+    </p>
+    <div class="grid" infinite-scroll-disabled="disableScroll" infinite-scroll="loadMoreData()" infinite-scroll-distance='2' >
+        <div class="face" ng-repeat="data in asciiData | orderBy : orderProp track by $index">
+            <div ng-show = "$index==0 || ($index % 9)!=0">
+                <p style="font-size: {{data.size * 8}}%">{{data.face}}</p>
+                <p>Price: {{data.price}}</p>
+                <p>Date: {{timeAgo(data.date)}}</p>
+            </div>
+            <img ng-show = "$index!=0 && ($index % 9)==0" class='ad' ng-src="{{::base.gridImgSrc}}" alt='advertisement' />
+        </div>
+    </div>
+    <div ng-show="disableScroll" class="no-data">
+        <p>End of faces</p>
+    </div>
+</div>
+
+</body>
+</html>
